@@ -1,4 +1,4 @@
-"""Chemins et constantes partagés par tous les notebooks."""
+"""Files and directories paths."""
 from pathlib import Path
 
 import pandas as pd
@@ -8,14 +8,14 @@ FICHIER_BRUT = RACINE / "data" / "raw" / "Data.xlsx"
 DOSSIER_PROPRE = RACINE / "data" / "processed"
 DOSSIER_FIGURES = RACINE / "figures"
 
-# Date d'extraction des données de l'application.
+# Date of data extraction from the application.
 
 DATE_EXTRACTION = pd.Timestamp("2026-10-19")
 
-# Date de migration des données.
+# Date of data migration.
 
 DATE_MIGRATION = pd.Timestamp("2025-06-03")
 
-# Dates par défaut pour la signature
+# Default dates for the signature
 
 DATES_SIGNATURE_DEFAUT = pd.to_datetime(["2024-08-05", "2021-08-13"])

@@ -1,4 +1,4 @@
-"""Petites briques pour dessiner des schémas de tables et de flux avec matplotlib."""
+""" Small building blocks for drawing schema diagrams with matplotlib."""
 from matplotlib.patches import FancyArrowPatch, Rectangle
 
 from src.style import ENCRE, STATUT
@@ -8,10 +8,10 @@ H_LIGNE = 0.34
 
 def boite_table(ax, x, y, titre, lignes, largeur=3.0, entete="#2a78d6", texte_entete="white", pointille=False,
                 sous_titre=None):
-    """Dessine une table (en-tête coloré + une ligne par colonne) dont le coin haut gauche est (x, y).
+    """Draw a table (colorful header + one line per column) whose top-left corner is (x, y).
 
-    lignes : liste de (marqueur, libellé), le marqueur valant 'PK', 'FK', 'SK', '' ...
-    Renvoie la géométrie de la boîte pour y accrocher des liens.
+    lignes : list of (marker, label), where the marker is 'PK', 'FK', 'SK', or '' ...
+    Returns the geometry of the box for linking.
     """
     h_entete = H_LIGNE * (1.9 if sous_titre else 1.3)
     hauteur = h_entete + H_LIGNE * (len(lignes) + 0.3)

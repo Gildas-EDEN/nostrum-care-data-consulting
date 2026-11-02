@@ -1,15 +1,15 @@
-"""Charte graphique commune : palette validée daltonisme, encre de texte, grille discrète."""
+""" Common style functions for graphical plots."""
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 from cycler import cycler
 
 from src.config import DOSSIER_FIGURES
 
-# Ordre fixe des couleurs catégorielles.
+# Fixed order of categorical colors.
 
 PALETTE = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
 
-# Couleurs réservées aux statuts (gravité, conformité).
+# Colors reserved for statuses (severity, compliance).
 
 STATUT = {"conforme": "#0ca30c", "mineure": "#fab219", "majeure": "#ec835a", "critique": "#d03b3b"}
 
