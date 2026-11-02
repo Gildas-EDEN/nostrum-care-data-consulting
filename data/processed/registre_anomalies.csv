@@ -1,0 +1,48 @@
+code,tables,famille,gravité,description,lignes,base,part,montant (€),traitement
+X11,Stripe ↔ Contrats,Cohérence temporelle,Critique,Paiement encaissé plus de 31 jours après la clôture du contrat,1446,132108,0.01094558997184122,95109.79,Signalement (flag_apres_cloture) : encaissement indu ou date de clôture erronée
+X5,Contrats → Stripe,Intégrité référentielle,Critique,Contrats dont toutes les transactions Stripe ont échoué (aucune cotisation encaissée),889,12216,0.07277341191879502,,Signalement (flag_jamais_encaisse)
+X3,Stripe → Contrats,Intégrité référentielle,Critique,Paiements Stripe rattachés à un contrat absent de Contrats,793,166373,0.004766398393970176,43795.59,"Signalement (flag_contrat_inconnu), exclus des analyses croisées"
+X14,Remboursements ↔ Stripe,Cohérence métier,Critique,Remboursement approuvé sur un contrat sans aucune cotisation encaissée,456,41890,0.010885652900453568,17366.49,Signalement (flag_contrat_jamais_encaisse)
+X1,"Contrats ↔ Stripe, Remboursements",Clé,Critique,Contrat_id non unique,268,12484,0.021467478372316565,121875.78,"Une ligne par contrat (souscripteur présent dans la liste des bénéficiaires, sinon le plus récent) ; autres beneficiary_id gardés dans une table pont"
+X2,"Stripe, Remboursements",Clé,Majeure,Aucun identifiant de ligne,221895,221895,1.0,,Création d'un identifiant technique après nettoyage
+R10,Remboursements,Complétude,Majeure,Date de décision toujours égale au jour de création : délai de traitement non mesurable,53219,53221,0.9999624208489131,,Documenté (impacte la question 2.2)
+X10,Stripe ↔ Contrats,Cohérence temporelle,Majeure,Paiement encaissé plus de 31 jours avant la signature du contrat,11738,132108,0.08885154570502922,,"Signalement (flag_avant_signature) : la date de signature n'est pas fiable (voir C3, C5)"
+C9,Contrats,Complétude,Majeure,"Source d'acquisition manquante, 34 libellés hétérogènes",10025,12484,0.8030278756808715,,"Regroupement en canaux, manquants en 'Non renseigné'"
+C4,Contrats,Cohérence,Majeure,created_at égal à la date de reprise du 03/06/2025 (pas une vraie date de création),6869,12216,0.5622953503601834,,Signalement (flag_migration) ; signature_date utilisée comme date de souscription
+C8,Contrats,Complétude,Majeure,"Statut professionnel manquant, avec synonymes (FONCTIONARY / CIVIL_SERVANT, TEMPORARY / INTERIM_WORKER)",6708,12484,0.5373277795578341,,"Harmonisation des libellés, manquants en UNKNOWN"
+X6,Remboursements → Contrats,Intégrité référentielle,Majeure,Remboursements sans contract_id,6391,53221,0.12008417729843483,,"Contrat déduit du bénéficiaire quand il n'appartient qu'à un seul contrat, sinon flag"
+C1,Contrats,Cohérence,Majeure,Date de clôture renseignée pour un contrat en cours,5312,5312,1.0,,Mise à vide pour les contrats en cours
+C3,Contrats,Cohérence,Majeure,Date d'effet antérieure à la date de signature,3038,12216,0.24869024230517353,,Signalement (flag_debut_avant_signature)
+C5,Contrats,Cohérence,Majeure,Date de signature par défaut (05/08/2024 ou 13/08/2021),2924,12216,0.23935821872953503,,Signalement (flag_signature_par_defaut) ; date exclue des analyses calendaires
+R1,Remboursements,Structure,Majeure,Lignes entièrement vides,1470,55522,0.026475991498865314,,Suppression
+R1,Remboursements,Structure,Majeure,Lignes entièrement vides,1470,55522,0.026475991498865314,,Suppression
+S7,Stripe,Doublon,Majeure,Paiements multiples encaissés le même jour pour le même montant (double prélèvement ou rattrapage d'impayés),1449,132541,0.010932466180276292,82469.62,"Signalement (flag_paiement_multiple), à faire valider par la finance"
+X4,Contrats → Stripe,Intégrité référentielle,Majeure,Contrats sans aucune transaction Stripe,1269,12216,0.10388015717092337,,Signalement (flag_sans_transaction)
+R6,Remboursements,Complétude,Majeure,Remboursement approuvé sans montant remboursé,1047,42269,0.02476992595046015,,"Signalement (flag_montant_manquant), exclu des sommes"
+R2,Remboursements,Structure,Majeure,"Lignes fragmentées (export corrompu, colonnes décalées, sans date ni statut)",831,55522,0.014967040092215698,,Suppression (non réparable de façon fiable)
+R2,Remboursements,Structure,Majeure,"Lignes fragmentées (export corrompu, colonnes décalées, sans date ni statut)",831,55522,0.014967040092215698,,Suppression (non réparable de façon fiable)
+S3,Stripe,Cohérence,Majeure,Paiement en échec mais marqué comme capturé,641,166373,0.003852788613537052,,Le statut fait foi (un motif de refus est présent) : captured corrigé
+C2,Contrats,Cohérence,Majeure,Clôture antérieure à la date d'effet,335,12216,0.027423051735428947,,Fermés : flag_annule_avant_effet ; en cours : date de clôture déjà mise à vide (C1)
+X8,Remboursements → Contrats,Intégrité référentielle,Majeure,Bénéficiaire inconnu (absent de tous les contrats et listes de bénéficiaires),286,53221,0.005373818605437703,,Signalement (flag_beneficiaire_inconnu)
+X9,Remboursements → Contrats,Intégrité référentielle,Majeure,Bénéficiaire connu mais non rattaché au contrat indiqué,16,53221,0.0003006332086958156,,Signalement (flag_beneficiaire_hors_contrat)
+X12,Remboursements ↔ Contrats,Cohérence temporelle,Majeure,Remboursement approuvé avant la date d'effet du contrat,13,41890,0.000310336595846264,,Signalement (flag_avant_effet)
+X7,Remboursements → Contrats,Intégrité référentielle,Majeure,Remboursements rattachés à un contrat absent de Contrats,8,53221,0.0001503166043479078,,Même traitement que X6
+S1,Stripe,Format,Mineure,Dates stockées en numéro de série Excel,166373,166373,1.0,,Conversion en datetime (origine 30/12/1899)
+S2,Stripe,Format,Mineure,Montants stockés en texte avec virgule décimale,166373,166373,1.0,,Conversion en nombre décimal
+S8,Stripe,Format,Mineure,"Colonnes constantes ou redondantes (Currency, Converted Currency, Converted Amount*, Statement Descriptor)",166373,166373,1.0,,Colonnes supprimées
+C14,Contrats,Format,Mineure,Colonne frequency constante (MONTHLY partout),12484,12484,1.0,,Colonne supprimée
+R8,Remboursements,Cohérence,Mineure,Montant remboursé différent de (montant demandé - reste à charge),6099,38459,0.15858446657479394,,"Conservé, documenté (règles de calcul à confirmer)"
+C7,Contrats,Format,Mineure,"Ville : casse, accents et arrondissements hétérogènes",5947,12484,0.4763697532842038,,"Normalisation (majuscules, sans accents, sans arrondissement)"
+R5,Remboursements,Format,Mineure,Montants en texte contenant des identifiants ou des motifs de refus,742,55522,0.013364071899427255,,"Conversion en nombre, valeurs non numériques mises à vide"
+C6,Contrats,Format,Mineure,Code postal numérique : zéro initial perdu ou code invalide,672,12484,0.05382890099327139,,"Texte sur 5 caractères, codes < 1000 mis à vide"
+X13,Remboursements ↔ Contrats,Cohérence temporelle,Mineure,Remboursement approuvé plus de 90 jours après la clôture (à contrôler : la date de soin est inconnue),382,41890,0.009119121508713296,,Signalement (flag_apres_cloture_90j)
+C13,Contrats,Cohérence,Mineure,Souscripteur absent de sa propre liste de bénéficiaires,296,12484,0.023710349247036206,,Ajouté à la table pont des bénéficiaires
+R9,Remboursements,Valeur extrême,Mineure,Montant remboursé supérieur à 500 €,58,41226,0.0014068791539319848,,"Signalement (flag_montant_extreme), à contrôler"
+C12,Contrats,Complétude,Mineure,Liste des bénéficiaires manquante ou vide,56,12484,0.004485741749439282,,Le souscripteur est compté comme unique bénéficiaire
+C10,Contrats,Cohérence,Mineure,Souscripteur principal mineur à la signature,13,12216,0.0010641781270464964,,Signalement (flag_mineur)
+S6,Stripe,Doublon,Mineure,"Transactions en double (même contrat, même seconde, même montant)",7,166373,4.207413462520962e-05,,Suppression
+C11,Contrats,Cohérence,Mineure,Type de bénéficiaire ADULT dans une table de souscripteurs principaux,5,12484,0.0004005126561999359,,"Conservé tel quel, documenté"
+S5,Stripe,Cohérence,Mineure,Montant converti nul alors que le montant est positif,4,166373,2.4042362642976925e-05,,Colonne convertie supprimée (devise unique : eur)
+S4,Stripe,Cohérence,Mineure,Paiement réussi avec un motif de refus,3,166373,1.8031771982232694e-05,,"Conservé, documenté"
+R7,Remboursements,Cohérence,Mineure,Remboursement refusé avec un montant positif,3,10952,0.0002739225712198685,,Signalement (flag_montant_incoherent)
+P1,Produits,Doublon,Mineure,"Nom de produit en double (IJHA 15, deux univers différents)",1,58,0.017241379310344827,,Conservé : deux identifiants distincts
